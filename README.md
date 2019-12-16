@@ -41,7 +41,7 @@ optional arguments:
 
 ```
 
-Example Usage:
+##### Example Usage:
 ```bash
 $ python twist-dl.py shingeki-no-kyojin
 Successfully gathered series information.
@@ -50,3 +50,6 @@ Ending Episode Range:2
 Downloading MP4s to Path: /Users/jfotherby/Desktop/projects/twist.moe-dl/anime/shingeki-no-kyojin/.
 /Users/jfotherby/Desktop/projects/twist.moe-dl/anime/shingeki-no-kyojin/shingeki-no-kyojin-episode-1.mp4:   7%|▋         | 45351/662939 [00:04<00:49, 12597.16KB/s]
 ```
+
+##### Disclaimer
+Downloading copyright videos may be illegal in your country. This tool is for educational purposes only.
