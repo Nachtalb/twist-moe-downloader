@@ -14,7 +14,7 @@ The associated scripts run in python version 2.7 and has not been tested in pyth
 `requirements.txt` to complete installation. I encourage you to use a virtualenv here if you can.
 
 ```bash
-git clone https://github.com/JFryy/twist.moe-downloader.git
+git clone https://github.com/JFryy/twist-moe-downloader.git
 cd twist.moe-downloader
 sudo pip install -r requirements.txt
 ```
