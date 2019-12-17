@@ -19,14 +19,15 @@ $ cd twist-moe-downloader
 $ sudo pip install -r requirements.txt
 ```
 
-and you're done!!
-`$ python twist-dl.py shingeki-no-kyojin`
+And you're done! You can started with something as simple as the command below.
+
+`$ python twist-dl.py download shingeki-no-kyojin`
 
 ### Running the script
 
 ```bash
 $ python twist-dl.py
-usage: python twist-dl.py search [title] / [title] [--directory DIRECTORY] [-h]
+usage: python twist-dl.py search [title] / download [title] [--directory DIRECTORY] [-h]
 
 Twist-dl is a small python tool for downloading video contents of series
 available on the website twist.moe locally! To download a particular series,
@@ -68,9 +69,9 @@ shingeki-no-kyojin-kuinaki-sentaku | 2019-08-02 18:15:58 | 2019-08-02 18:15:58 |
 ```
 
 #### Download
-Download by passing the series title as found from search. Not specifying a range will download the entire contents of the series.
+Download by passing the series title as found from search. Not specifying a range with `--range` will download the entire contents of the series.
 ```bash
-$ python twist-dl.py shingeki-no-kyojin
+$ python twist-dl.py download shingeki-no-kyojin
 https://twist.moe/api/anime/shingeki-no-kyojin/sources
 Successfully gathered series information.
 Downloading MP4s to Path: anime/shingeki-no-kyojin/ with episode range of 1-25

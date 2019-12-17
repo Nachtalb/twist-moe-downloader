@@ -68,7 +68,7 @@ def printTable(myDict, colList=None, sep='  '):
 
 if __name__ == '__main__':
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    usage = "python twist-dl.py search [title] / [title] [--directory DIRECTORY] [-h]"
+    usage = "python twist-dl.py search [title] / download [title] [--directory DIRECTORY] [-h]"
     parser = ArgumentParser(
         description="Twist-dl is a small python tool for downloading video contents of series available on the website "
                     "twist.moe locally! To download a particular series, find the title as defined in twist.moe's url string."
@@ -116,8 +116,8 @@ if __name__ == '__main__':
         r = json.loads(r.content)
         printTable(basic_search(query=title[1], response=r))
         exit(0)
-    else:
-        title = title[0]
+    elif title[0].lower() == 'download':
+        title = title[1]
 
     # Directory Path Handling.
     if not options.directory:
