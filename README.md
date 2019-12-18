@@ -42,7 +42,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --directory DIRECTORY
                         Directory path to save downloaded contents
-  --range RANGE         Range of episodes to download. i.e. --range=1-24
+  --range RANGE         Range of episodes to download. i.e. --range=1-24 or
+                        for a single episode --range=1
 
 ```
 

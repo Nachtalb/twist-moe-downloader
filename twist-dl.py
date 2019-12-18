@@ -76,7 +76,7 @@ if __name__ == '__main__':
                         )
 
     parser.add_argument("--range", dest="range",
-                        help="Range of episodes to download. i.e. --range=1-24",
+                        help="Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1",
                         required=False,
                         default=""
                         )
@@ -139,21 +139,24 @@ if __name__ == '__main__':
 
     episode_begin, episode_end = series_data[0]['number'], series_data[-1]['number']
     if not episode_range:
-        episode_range = input("Episode selection between {}-{}. To select range input range i.e. '1-5'. "
-                              "Press 'Enter' to download all contents. \nInput: ".format(
+        episode_range = input("Episode selection between {}-{}. To download a range enter '1-5', for a single episode "
+                              "enter '5' or leave it empty press 'Enter' to download all episodes. \nInput: ".format(
                                   episode_begin, episode_end
                               ))
 
     # Download entire range if range not specified.
     if episode_range:
-        try:
-            episode_begin, episode_end = episode_range.split('-')
-        except ValueError:
-            print('"{}" does not match the range pattern "XX-YY"'.format(episode_range))
-            exit(1)
+        if '-' not in episode_range:
+            episode_begin = episode_end = validate_episode_input(episode_range, series_data)
+        else:
+            try:
+                episode_begin, episode_end = episode_range.split('-')
+            except ValueError:
+                print('"{}" does not match the range pattern "XX-YY"'.format(episode_range))
+                exit(1)
 
-        episode_begin = validate_episode_input(episode_begin, series_data)
-        episode_end = validate_episode_input(episode_end, series_data)
+            episode_begin = validate_episode_input(episode_begin, series_data)
+            episode_end = validate_episode_input(episode_end, series_data)
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
