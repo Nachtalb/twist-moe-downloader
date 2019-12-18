@@ -146,8 +146,14 @@ if __name__ == '__main__':
 
     # Download entire range if range not specified.
     if episode_range:
-        episode_begin = validate_episode_input(episode_range.split('-')[0], series_data)
-        episode_end = validate_episode_input(episode_range.split('-')[1], series_data)
+        try:
+            episode_begin, episode_end = episode_range.split('-')
+        except ValueError:
+            print('"{}" does not match the range pattern "XX-YY"'.format(episode_range))
+            exit(1)
+
+        episode_begin = validate_episode_input(episode_begin, series_data)
+        episode_end = validate_episode_input(episode_end, series_data)
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
