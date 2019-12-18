@@ -31,14 +31,18 @@ def get_series_url_list(series_data):
     return source_url_list
 
 
-def validate_episode_input(s):
+def validate_episode_input(s, series_data):
     try:
-        if 0 < int(s) < 100:
-            return int(s)
-        else:
-            print('Invalid input, exiting...')
+        episode = int(s)
+        in_series = bool(tuple(filter(lambda data: data['number'] == episode,
+                                      series_data)))
+        if not in_series:
+            print('Series has no episode {}'.format(s))
             exit(1)
+
+        return int(s)
     except Exception:
+        print('Invalid input, exiting...')
         exit(1)
 
 
@@ -76,7 +80,7 @@ if __name__ == '__main__':
                         )
 
     parser.add_argument("--range", dest="range",
-                        help="Range of episodes to download. i.e. --range=1-24",
+                        help="Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1",
                         required=False,
                         default=""
                         )
@@ -141,17 +145,27 @@ if __name__ == '__main__':
     r = requests.get(url, headers=headers)
     series_data = json.loads(r.content)
     print('Successfully gathered series information.')
+
+    episode_begin, episode_end = series_data[0]['number'], series_data[-1]['number']
     if not episode_range:
-        episode_range = input("Episode selection between {}-{}. To select range input range i.e. '1-5'. "
-                                  "Press 'Enter' to download all contents. \nInput: ".format('1', str(len(series_data))))
+        episode_range = input("Episode selection between {}-{}. To download a range enter '1-5', for a single episode "
+                              "enter '5' or leave it empty press 'Enter' to download all episodes. \nInput: ".format(
+                                  episode_begin, episode_end
+                              ))
 
     # Download entire range if range not specified.
     if episode_range:
-        episode_begin = validate_episode_input(episode_range.split('-')[0])
-        episode_end = validate_episode_input(episode_range.split('-')[1])
-    else:
-        episode_begin = 1
-        episode_end = len(series_data)
+        if '-' not in episode_range:
+            episode_begin = episode_end = validate_episode_input(episode_range, series_data)
+        else:
+            try:
+                episode_begin, episode_end = episode_range.split('-')
+            except ValueError:
+                print('"{}" does not match the range pattern "XX-YY"'.format(episode_range))
+                exit(1)
+
+            episode_begin = validate_episode_input(episode_begin, series_data)
+            episode_end = validate_episode_input(episode_end, series_data)
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
