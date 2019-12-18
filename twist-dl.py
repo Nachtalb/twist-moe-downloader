@@ -3,6 +3,7 @@ import tqdm
 import json
 import decrypt
 import os
+import re
 import sys
 from PyInquirer import prompt
 from argparse import ArgumentParser
@@ -62,7 +63,10 @@ if __name__ == '__main__':
                     "geass' can be found by simply entering 'code'.",
         usage=usage
     )
-    parser.add_argument('title')
+    parser.add_argument('title',
+                        help='To download a particular series, use the series\'s url like so "https://twist.moe/a/made-in-abyss" '
+                              'and to search for a series enter a part of its name as found in a twist.moe\'s url string like "fate".'
+                       )
 
 
     parser.add_argument("--directory", dest="directory",
@@ -105,27 +109,32 @@ if __name__ == '__main__':
     if not os.path.isdir(directory):
         os.makedirs(directory)
 
-    # Search for Anime:
     headers = {'x-access-token': '{}'.format(api_token)}
-    r = requests.get(base_url + '/api/anime', headers=headers)
-    r = json.loads(r.content)
-    found_anime = [result['title'] for result in basic_search(query=title, response=r)]
-    if not found_anime:
-        print("Error: It looks like the title you entered is not found, please ensure it is a substring "
-              "of the url path listed in twist.moe.")
-        exit(1)
 
-    # Prompt for found Anime in Search:
-    questions = [
-        {
-            'type': 'list',
-            'name': 'title',
-            'message': 'Anime found. Please choose a series to download:',
-            'choices': found_anime
-        }
-    ]
-    answers = prompt(questions)
-    title = str(answers['title'])
+    url_match = re.findall('twist.moe/a/([a-z0-9-]+)', title)
+    if url_match:
+        title = url_match[0]
+    else:
+        # Search for Anime:
+        r = requests.get(base_url + '/api/anime', headers=headers)
+        r = json.loads(r.content)
+        found_anime = [result['title'] for result in basic_search(query=title, response=r)]
+        if not found_anime:
+            print("Error: It looks like the title you entered is not found, please ensure it is a substring "
+                  "of the url path listed in twist.moe.")
+            exit(1)
+
+        # Prompt for found Anime in Search:
+        questions = [
+            {
+                'type': 'list',
+                'name': 'title',
+                'message': 'Anime found. Please choose a series to download:',
+                'choices': found_anime
+            }
+        ]
+        answers = prompt(questions)
+        title = str(answers['title'])
 
     # Get series data, which includes episode data and encrypted sourcefile paths.
     url = '{}/api/anime/{}/sources'.format(base_url, title)

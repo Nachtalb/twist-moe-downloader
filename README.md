@@ -4,8 +4,8 @@
 
 ![](examples/tty.gif)
 This is a small python tool for downloading video contents of series available on the website `twist.moe` locally.
-To download a particular series, find the title as defined in twist.moe's url string.
-i.e. `https://twist.moe/a/made-in-abyss/` would need the argument passed as `made-in-abyss`.
+To download a particular series, use the series's url like so `https://twist.moe/a/made-in-abyss` and to search for
+a series enter a part of its name as found in a twist.moe's url string like `fate`.
 
 Remember to support twist.moe with donations if you can, as they do a great job of operating their site!
 
@@ -36,7 +36,10 @@ series, enter a keyword of the series name. i.e. 'code geass' can be found by
 simply entering 'code'.
 
 positional arguments:
-  title
+  title                 To download a particular series, use the series's url
+                        like so "https://twist.moe/a/made-in-abyss" and to
+                        search for a series enter a part of its name as found
+                        in a twist.moe's url string like "fate".
 
 optional arguments:
   -h, --help            show this help message and exit
