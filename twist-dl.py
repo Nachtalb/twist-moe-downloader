@@ -132,17 +132,18 @@ if __name__ == '__main__':
     r = requests.get(url, headers=headers)
     series_data = json.loads(r.content)
     print('Successfully gathered series information.')
+
+    episode_begin, episode_end = series_data[0]['number'], series_data[-1]['number']
     if not episode_range:
         episode_range = input("Episode selection between {}-{}. To select range input range i.e. '1-5'. "
-                                  "Press 'Enter' to download all contents. \nInput: ".format('1', str(len(series_data))))
+                              "Press 'Enter' to download all contents. \nInput: ".format(
+                                  episode_begin, episode_end
+                              ))
 
     # Download entire range if range not specified.
     if episode_range:
         episode_begin = validate_episode_input(episode_range.split('-')[0])
         episode_end = validate_episode_input(episode_range.split('-')[1])
-    else:
-        episode_begin = 1
-        episode_end = len(series_data)
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
