@@ -1,13 +1,15 @@
-import requests
-import tqdm
 import json
-import decrypt
 import os
 import re
+import requests
 import sys
+import tqdm
+
 from PyInquirer import prompt
 from argparse import ArgumentParser
+from decrypt import decrypt
 from six.moves import input
+
 
 
 def download_file(url, path, headers=None):
@@ -15,19 +17,26 @@ def download_file(url, path, headers=None):
     file_size = int(r.headers['Content-Length'])
     chunk_size = 1024
     num_bars = int(file_size / chunk_size)
+
     with open(path, 'wb') as fp:
-        for chunk in \
-                tqdm.tqdm(r.iter_content(chunk_size=chunk_size), total=num_bars, unit='KB', desc=path, leave=True):
+        for chunk in tqdm.tqdm(r.iter_content(chunk_size=chunk_size),
+                               total=num_bars,
+                               unit='KB',
+                               desc=path,
+                               leave=True):
             fp.write(chunk)
-    return
 
 
 def get_series_url_list(series_data):
     source_url_list = {title: {}}
     for entry in series_data:
-        decrypted_source = decrypt.decrypt(entry['source'].encode('utf-8'), source_key.encode('utf-8')).decode('utf-8').lstrip(' ')
+        decrypted_source = decrypt(encrypted=entry['source'].encode('utf-8'),
+                                   passphrase=source_key.encode('utf-8'))
+        decrypted_source = decrypted_source.decode('utf-8').lstrip(' ')
+
         video_url = configuration['base_url'] + decrypted_source
         source_url_list[title][entry['number']] = video_url
+
     return source_url_list
 
 
@@ -55,35 +64,39 @@ def basic_search(query, response):
             del title['slug']['slug']
             del title['slug']['anime_id']
             search_results.append(title['slug'])
+
     return search_results
 
 
 if __name__ == '__main__':
     base_dir = os.path.dirname(os.path.realpath(__file__))
+
     usage = 'python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]'
     parser = ArgumentParser(
         description='Twist-dl is a small python tool for downloading video contents of series available on the website '
-                    'twist.moe locally! To download a list of particular series, enter a keyword of the series name. i.e. "code '
-                    'geass" can be found by simply entering "code".',
+                    'twist.moe locally! To download a list of particular series, enter a keyword of the series name. '
+                    'i.e. "code geass" can be found by simply entering "code".',
         usage=usage
     )
-    parser.add_argument('title',
-                        help='To download a particular series, use the series\'s url like so "https://twist.moe/a/made-in-abyss" '
-                              'and to search for a series enter a part of its name as found in a twist.moe\'s url string like "fate".'
-                       )
-
-
-    parser.add_argument('--directory', dest='directory',
-                        help='Directory path to save downloaded contents',
-                        required=False,
-                        default=''
-                        )
-
-    parser.add_argument('--range', dest='range',
-                        help='Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1',
-                        required=False,
-                        default=''
-                        )
+    parser.add_argument(
+        'title',
+        help='To download a particular series, use the series\'s url like so "https://twist.moe/a/made-in-abyss" '
+             'and to search for a series enter a part of its name as found in a twist.moe\'s url string like "fate".'
+    )
+    parser.add_argument(
+        '--directory',
+        dest='directory',
+        help='Directory path to save downloaded contents',
+        required=False,
+        default=''
+    )
+    parser.add_argument(
+        '--range',
+        dest='range',
+        help='Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1',
+        required=False,
+        default=''
+    )
 
     if len(sys.argv) < 2:
         parser.print_help()
@@ -148,10 +161,9 @@ if __name__ == '__main__':
 
     episode_begin, episode_end = series_data[0]['number'], series_data[-1]['number']
     if not episode_range:
-        episode_range = input('Episode selection between {}-{}. To download a range enter "1-5", for a single episode '
-                              'enter "5" or leave it empty press "Enter" to download all episodes. \nInput: '.format(
-                                  episode_begin, episode_end
-                              ))
+        episode_range = input(
+            'Episode selection between {}-{}. To download a range enter "1-5", for a single episode enter "5" or leave '
+            'it empty press "Enter" to download all episodes. \nInput: '.format(episode_begin, episode_end))
 
     # Download entire range if range not specified.
     if episode_range:
@@ -171,13 +183,14 @@ if __name__ == '__main__':
     source_url_list = get_series_url_list(series_data)
     print('Downloading MP4s to Path: {} with episode range of {}-{}.'.format(directory, episode_begin, episode_end))
     headers = {
-        'User-Agent': \
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
-            '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
+                      '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
         'Referer': base_url
     }
+
     for episode in range(episode_begin, episode_end + 1):
         path = '{}{}-episode-{}.mp4'.format(directory, title, episode)
         url = source_url_list[title][episode]
         download_file(url=url, headers=headers, path=path)
+
     print('Downloads completed!')
