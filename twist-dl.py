@@ -6,6 +6,7 @@ import os
 import sys
 from PyInquirer import prompt
 from argparse import ArgumentParser
+from six.moves import input
 
 
 def download_file(url, path, headers=None):
@@ -23,7 +24,7 @@ def download_file(url, path, headers=None):
 def get_series_url_list(series_data):
     source_url_list = {title: {}}
     for entry in series_data:
-        decrypted_source = decrypt.decrypt(entry['source'].encode('utf-8'), source_key).decode('utf-8').lstrip(' ')
+        decrypted_source = decrypt.decrypt(entry['source'].encode('utf-8'), source_key.encode('utf-8')).decode('utf-8').lstrip(' ')
         video_url = configuration["base_url"] + decrypted_source
         source_url_list[title][entry['number']] = video_url
     return source_url_list
@@ -34,7 +35,7 @@ def validate_episode_input(s):
         if 0 < int(s) < 100:
             return int(s)
         else:
-            print 'Invalid input, exiting...'
+            print('Invalid input, exiting...')
             exit(1)
     except Exception:
         exit(1)
@@ -110,8 +111,8 @@ if __name__ == '__main__':
     r = json.loads(r.content)
     found_anime = [result['title'] for result in basic_search(query=title, response=r)]
     if not found_anime:
-        print "Error: It looks like the title you entered is not found, please ensure it is a substring " \
-              "of the url path listed in twist.moe."
+        print("Error: It looks like the title you entered is not found, please ensure it is a substring "
+              "of the url path listed in twist.moe.")
         exit(1)
 
     # Prompt for found Anime in Search:
@@ -132,7 +133,7 @@ if __name__ == '__main__':
     series_data = json.loads(r.content)
     print('Successfully gathered series information.')
     if not episode_range:
-        episode_range = raw_input("Episode selection between {}-{}. To select range input range i.e. '1-5'. "
+        episode_range = input("Episode selection between {}-{}. To select range input range i.e. '1-5'. "
                                   "Press 'Enter' to download all contents. \nInput: ".format('1', str(len(series_data))))
 
     # Download entire range if range not specified.
@@ -145,7 +146,7 @@ if __name__ == '__main__':
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
-    print 'Downloading MP4s to Path: {} with episode range of {}-{}.'.format(directory, episode_begin, episode_end)
+    print('Downloading MP4s to Path: {} with episode range of {}-{}.'.format(directory, episode_begin, episode_end))
     headers = {
         'User-Agent': \
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '

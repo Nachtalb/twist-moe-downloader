@@ -38,5 +38,3 @@ def decrypt(encrypted, passphrase):
     iv = key_iv[32:]
     aes = AES.new(key, AES.MODE_CBC, iv)
     return unpad(aes.decrypt(encrypted[16:]))
-
-
