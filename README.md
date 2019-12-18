@@ -3,15 +3,15 @@
 ### Description
 
 ![](examples/tty.gif)
-This is a small python tool for downloading video contents of series available on the website `twist.moe` locally. 
-To download a particular series, find the title as defined in twist.moe's url string. 
+This is a small python tool for downloading video contents of series available on the website `twist.moe` locally.
+To download a particular series, find the title as defined in twist.moe's url string.
 i.e. `https://twist.moe/a/made-in-abyss/` would need the argument passed as `made-in-abyss`.
 
 Remember to support twist.moe with donations if you can, as they do a great job of operating their site!
 
 ### Installation
-The associated scripts run in python version 2.7 and has not been tested in python 3. Simply install the 
-`requirements.txt` to complete installation. I encourage you to use a virtualenv here if you can.
+The scripts has been tested against python 2.7 and 3.7. Simply install the `requirements.txt` to complete installation.
+I encourage you to use a virtualenv here if you can.
 
 ```bash
 $ git clone https://github.com/JFryy/twist-moe-downloader.git
