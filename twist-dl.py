@@ -26,7 +26,7 @@ def get_series_url_list(series_data):
     source_url_list = {title: {}}
     for entry in series_data:
         decrypted_source = decrypt.decrypt(entry['source'].encode('utf-8'), source_key.encode('utf-8')).decode('utf-8').lstrip(' ')
-        video_url = configuration["base_url"] + decrypted_source
+        video_url = configuration['base_url'] + decrypted_source
         source_url_list[title][entry['number']] = video_url
     return source_url_list
 
@@ -60,11 +60,11 @@ def basic_search(query, response):
 
 if __name__ == '__main__':
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    usage = "python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]"
+    usage = 'python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]'
     parser = ArgumentParser(
-        description="Twist-dl is a small python tool for downloading video contents of series available on the website "
-                    "twist.moe locally! To download a list of particular series, enter a keyword of the series name. i.e. 'code "
-                    "geass' can be found by simply entering 'code'.",
+        description='Twist-dl is a small python tool for downloading video contents of series available on the website '
+                    'twist.moe locally! To download a list of particular series, enter a keyword of the series name. i.e. "code '
+                    'geass" can be found by simply entering "code".',
         usage=usage
     )
     parser.add_argument('title',
@@ -73,16 +73,16 @@ if __name__ == '__main__':
                        )
 
 
-    parser.add_argument("--directory", dest="directory",
-                        help="Directory path to save downloaded contents",
+    parser.add_argument('--directory', dest='directory',
+                        help='Directory path to save downloaded contents',
                         required=False,
-                        default=""
+                        default=''
                         )
 
-    parser.add_argument("--range", dest="range",
-                        help="Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1",
+    parser.add_argument('--range', dest='range',
+                        help='Range of episodes to download. i.e. --range=1-24 or for a single episode --range=1',
                         required=False,
-                        default=""
+                        default=''
                         )
 
     if len(sys.argv) < 2:
@@ -124,8 +124,8 @@ if __name__ == '__main__':
         r = json.loads(r.content)
         found_anime = [result['title'] for result in basic_search(query=title, response=r)]
         if not found_anime:
-            print("Error: It looks like the title you entered is not found, please ensure it is a substring "
-                  "of the url path listed in twist.moe.")
+            print('Error: It looks like the title you entered is not found, please ensure it is a substring '
+                  'of the url path listed in twist.moe.')
             exit(1)
 
         # Prompt for found Anime in Search:
@@ -148,8 +148,8 @@ if __name__ == '__main__':
 
     episode_begin, episode_end = series_data[0]['number'], series_data[-1]['number']
     if not episode_range:
-        episode_range = input("Episode selection between {}-{}. To download a range enter '1-5', for a single episode "
-                              "enter '5' or leave it empty press 'Enter' to download all episodes. \nInput: ".format(
+        episode_range = input('Episode selection between {}-{}. To download a range enter "1-5", for a single episode '
+                              'enter "5" or leave it empty press "Enter" to download all episodes. \nInput: '.format(
                                   episode_begin, episode_end
                               ))
 
