@@ -68,7 +68,7 @@ def printTable(myDict, colList=None, sep='  '):
 
 if __name__ == '__main__':
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    usage = "python twist-dl.py search [title] / download [title] [--directory DIRECTORY] [-h]"
+    usage = "python twist-dl.py search [title] / download [title] [--range RANGE][--directory DIRECTORY] [-h]"
     parser = ArgumentParser(
         description="Twist-dl is a small python tool for downloading video contents of series available on the website "
                     "twist.moe locally! To download a particular series, find the title as defined in twist.moe's url string."
@@ -93,6 +93,11 @@ if __name__ == '__main__':
 
     if len(sys.argv) < 2:
         parser.print_help()
+        exit(1)
+
+    if len(sys.argv) == 2:
+        print "Please run this script with title name followed by the command 'search' or 'download.'\n"\
+              "i.e. 'python twist-dl.py download made-in-abyss'"
         exit(1)
 
     # Parse arg vars.

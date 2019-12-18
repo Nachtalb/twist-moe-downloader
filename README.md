@@ -27,7 +27,8 @@ And you're done! You can started with something as simple as the command below.
 
 ```bash
 $ python twist-dl.py
-usage: python twist-dl.py search [title] / download [title] [--directory DIRECTORY] [-h]
+
+usage: python twist-dl.py search [title] / download [title] [--range RANGE] [--directory DIRECTORY] [-h]
 
 Twist-dl is a small python tool for downloading video contents of series
 available on the website twist.moe locally! To download a particular series,
