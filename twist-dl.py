@@ -30,14 +30,18 @@ def get_series_url_list(series_data):
     return source_url_list
 
 
-def validate_episode_input(s):
+def validate_episode_input(s, series_data):
     try:
-        if 0 < int(s) < 100:
-            return int(s)
-        else:
-            print('Invalid input, exiting...')
+        episode = int(s)
+        in_series = bool(tuple(filter(lambda data: data['number'] == episode,
+                                      series_data)))
+        if not in_series:
+            print('Series has no episode {}'.format(s))
             exit(1)
+
+        return int(s)
     except Exception:
+        print('Invalid input, exiting...')
         exit(1)
 
 
@@ -142,8 +146,8 @@ if __name__ == '__main__':
 
     # Download entire range if range not specified.
     if episode_range:
-        episode_begin = validate_episode_input(episode_range.split('-')[0])
-        episode_end = validate_episode_input(episode_range.split('-')[1])
+        episode_begin = validate_episode_input(episode_range.split('-')[0], series_data)
+        episode_end = validate_episode_input(episode_range.split('-')[1], series_data)
 
     # Decrypt the source url and get a list of source URLs.
     source_url_list = get_series_url_list(series_data)
