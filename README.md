@@ -21,21 +21,19 @@ $ sudo pip install -r requirements.txt
 
 And you're done! You can started with something as simple as the command below.
 
-`$ python twist-dl.py download shingeki-no-kyojin`
+`$ python twist-dl.py fate`
 
 ### Running the script
 
 ```bash
 $ python twist-dl.py
 
-usage: python twist-dl.py search [title] / download [title] [--range RANGE] [--directory DIRECTORY] [-h]
+usage: python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]
 
 Twist-dl is a small python tool for downloading video contents of series
-available on the website twist.moe locally! To download a particular series,
-find the title as defined in twist.moe's url string. i.e. 'https://twist.moe/a
-/made-in-abyss/' would need the argument passed as 'made-in-abyss'. Optionally
-searching can be enabled for searching through twist.moe's catalog by using
-the search command.
+available on the website twist.moe locally! To download a list of particular
+series, enter a keyword of the series name. i.e. 'code geass' can be found by
+simply entering 'code'.
 
 positional arguments:
   title
@@ -50,33 +48,17 @@ optional arguments:
 
 ### Example Usage:
 
-#### Search
-Use the search command to retrieve the title name for downloading:
-```bash
-$ python twist-dl.py search shingeki-no-kyojin
-title                              | created_at          | updated_at          | id
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin                 | 2016-08-14 12:50:06 | 2016-08-14 12:50:06 | 657
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin-season-2        | 2017-04-01 20:59:42 | 2017-04-01 20:59:42 | 1019
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin-season-3        | 2018-07-22 23:20:00 | 2018-07-22 23:20:00 | 1508
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin-ova             | 2019-08-02 18:10:15 | 2019-08-02 18:10:15 | 2078
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin-lost-girls      | 2019-08-02 18:13:33 | 2019-08-02 18:13:33 | 2079
------------------------------------+---------------------+---------------------+-----
-shingeki-no-kyojin-kuinaki-sentaku | 2019-08-02 18:15:58 | 2019-08-02 18:15:58 | 2080
-```
-
-#### Download
+##### Download And Search
 Download by passing the series title as found from search. Not specifying a range with `--range` will download the entire contents of the series.
 ```bash
-$ python twist-dl.py download shingeki-no-kyojin
-https://twist.moe/api/anime/shingeki-no-kyojin/sources
+$ python twist-dl.py code
+? Anime found. Please choose a series to download:  code-geass-hangyaku-no-lelouch-r2
 Successfully gathered series information.
-Downloading MP4s to Path: anime/shingeki-no-kyojin/ with episode range of 1-25
-anime/shingeki-no-kyojin/shingeki-no-kyojin-episode-1.mp4:   4%|▎         | 24479/662939 [00:03<01:02, 10219.80KB/s]
+Episode selection between 1-25. To select range input range i.e. '1-5'. Press 'Enter' to download all contents.
+Input:
+Downloading MP4s to Path: anime/code/ with episode range of 1-25.
+anime/code/code-geass-hangyaku-no-lelouch-r2-episode-1.mp4: 489619KB [00:48, 10191.13KB/s]
+...
 
 ```
 ##### Disclaimer

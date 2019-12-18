@@ -1,3 +1,4 @@
-requests
-pycryptodomex
-tqdm
+requests==2.22.0
+pycryptodomex==3.9.4
+PyInquirer==1.0.3
+tqdm==4.40.2
