@@ -122,6 +122,46 @@ class Anime(BaseTwistObject):
         data['slug'] = self.slug.to_dict()
         return data
 
+    def sources(self, hard_reload=False):
+        if not self._sources or hard_reload:
+            self._sources = self.client.anime_sources(self)
+        return self._sources
+
+
+class Source(BaseTwistObject):
+
+    def __init__(self,
+                 anime_id,
+                 id,
+                 number,
+                 source,
+                 created_at=None,
+                 updated_at=None,
+                 slug=None,
+                 **kwargs):
+        super(Source, self).__init__(**kwargs)
+
+        self.anime_id = anime_id
+        self.id = id
+        self.number = number
+        self.source = source
+
+        self.created_at = created_at
+        self.updated_at = updated_at
+
+    @classmethod
+    def de_json(cls, data, request, client):
+        if not data:
+            return None
+
+        data = super(Source, cls).de_json(data, request, client)
+
+        return cls(client=client, request=request, **data)
+
+    @property
+    def anime(self):
+        self.client.get_anime_by_id(self.anime_id)
+
 
 class TwistDL(object):
     base_url = 'https://twist.moe'
@@ -156,6 +196,12 @@ class TwistDL(object):
             response_data, url = self._request(endpoint='anime')
             self._animes = list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
         return self._animes
+
+    def anime_sources(self, anime):
+        endpoint = 'anime/{}/sources'.format(anime.slug.slug)
+
+        response_data, url = self._request(endpoint=endpoint)
+        return list(map(lambda source: Source.de_json(source, (url, {}), self), response_data))
 
     def search_animes(self, title=None, slug=None):
         result = []
