@@ -130,6 +130,8 @@ class Anime(BaseTwistObject):
 
 class Source(BaseTwistObject):
 
+    _url = None
+
     def __init__(self,
                  anime_id,
                  id,
@@ -161,6 +163,21 @@ class Source(BaseTwistObject):
     @property
     def anime(self):
         self.client.get_anime_by_id(self.anime_id)
+
+    @property
+    def url(self):
+        if not self._url:
+            self._url = self.decrypt_url()
+        return self._url
+
+    def decrypt_url(self):
+        encrypted = self.source.encode('utf-8')
+        passphrase = self.client.source_key.encode('utf-8')
+
+        decrypted_path = decrypt(encrypted, passphrase)
+        path = decrypted_path.decode('utf-8').lstrip()
+
+        return self.client.base_url + path
 
 
 class TwistDL(object):
