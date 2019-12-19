@@ -123,6 +123,8 @@ class TwistDL(object):
     default_api_token = '1rj2vRtegS8Y60B3w3qNZm5T2Q0TN2NR'
     default_source_key = 'LXgIVP&PorO68Rq7dTx8N^lP!Fa5sGJ^*XK'
 
+    _animes = None
+
     def __init__(self, api_token=None, source_key=None):
         self.api_token = api_token or self.default_api_token
         self.source_key = source_key or self.default_source_key
@@ -142,6 +144,8 @@ class TwistDL(object):
 
         return response.json(), built_url
 
-    def animes(self):
-        response_data, url = self._request(endpoint='anime')
-        return list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
+    def animes(self, hard_reload=False):
+        if not self._animes or hard_reload:
+            response_data, url = self._request(endpoint='anime')
+            self._animes = list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
+        return self._animes
