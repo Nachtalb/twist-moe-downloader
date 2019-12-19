@@ -1,13 +1,8 @@
 import json
-import os
-import re
 import requests
-import sys
-import tqdm
+import six
 
-from argparse import ArgumentParser
 from decrypt import decrypt
-from six.moves import input
 from pathlib2 import Path
 
 
