@@ -125,7 +125,7 @@ class Anime(BaseTwistObject):
 
 class Source(BaseTwistObject):
 
-    _url = None
+    _path = None
 
     def __init__(self,
                  anime_id,
@@ -161,18 +161,25 @@ class Source(BaseTwistObject):
 
     @property
     def url(self):
-        if not self._url:
-            self._url = self.decrypt_url()
-        return self._url
+        return self.client.base_url + self.path
 
-    def decrypt_url(self):
+    @property
+    def path(self):
+        if not self._path:
+            self._path = self.decrypt_url_path()
+        return self._path
+
+    def decrypt_url_path(self):
         encrypted = self.source.encode('utf-8')
         passphrase = self.client.source_key.encode('utf-8')
 
         decrypted_path = decrypt(encrypted, passphrase)
         path = decrypted_path.decode('utf-8').lstrip()
 
-        return self.client.base_url + path
+        return path
+
+    def download_stream(self, file, **kwargs):
+        return self.client.download_stream(self, file, **kwargs)
 
 
 class TwistDL(object):
@@ -231,3 +238,46 @@ class TwistDL(object):
 
     def get_anime_by_id(self, anime_id):
         return next(iter(filter(lambda anime: anime.id == anime_id, self.animes())), None)
+
+    def download_stream(self, source, file, chunk_size=1024):
+        """Download source to file and get download progress through generator
+
+        Args:
+            file: Can either be a pathlike obj, str or filelike obj
+
+        Yield:
+            Tuple like (chunks downloaded, total chunks)
+        """
+        file_obj = None
+        if isinstance(file, Path):
+            pass
+        elif isinstance(file, six.string_types):
+            file = Path(file)
+        elif hasattr(file, 'write'):
+            file_obj = file
+        else:
+            raise TypeError('File is neither pathlike, filelike or a sring')
+
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
+                          '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+            'Referer': self.base_url
+        }
+
+        response = requests.get(source.url, headers=headers, stream=True)
+
+        file_size = int(response.headers['Content-Length'])
+        toatal_chunks = int(file_size / chunk_size)
+
+        yield 0, toatal_chunks
+
+        if file_obj:
+            for chunks_downloaded, chunk in enumerate(response.iter_content(chunk_size=chunk_size), 1):
+                file_obj.write(chunk)
+                yield chunks_downloaded, toatal_chunks
+        else:
+            file.touch()
+            with file.open('wb') as file_obj:
+                for chunks_downloaded, chunk in enumerate(response.iter_content(chunk_size=chunk_size), 1):
+                    file_obj.write(chunk)
+                    yield chunks_downloaded, toatal_chunks
