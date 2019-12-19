@@ -149,3 +149,17 @@ class TwistDL(object):
             response_data, url = self._request(endpoint='anime')
             self._animes = list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
         return self._animes
+
+    def search_animes(self, title=None, slug=None):
+        result = []
+
+        title = (title or '').lower()
+        slug = (slug or '').lower()
+
+        for anime in self.animes():
+            if title and title in anime.title.lower():
+                result.append(anime)
+                continue
+            if slug and slug in anime.slug.slug:
+                result.append(anime)
+        return result
