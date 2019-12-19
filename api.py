@@ -71,8 +71,15 @@ class Slug(BaseTwistObject):
         super(Slug, cls).de_json(data, request, client)
         return cls(client=client, request=request, **data)
 
+    @property
+    def anime(self):
+        self.client.get_anime_by_id(self.anime_id)
+
 
 class Anime(BaseTwistObject):
+
+    _sources = None
+
     def __init__(self,
                  title,
                  id,
@@ -163,3 +170,6 @@ class TwistDL(object):
             if slug and slug in anime.slug.slug:
                 result.append(anime)
         return result
+
+    def get_anime_by_id(self, anime_id):
+        return next(iter(filter(lambda anime: anime.id == anime_id, self.animes())), None)
