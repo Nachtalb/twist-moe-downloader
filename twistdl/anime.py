@@ -56,3 +56,9 @@ class Anime(BaseTwistObject):
         if not self._sources:
             self.fetch_sources()
         return self._sources
+
+    @property
+    def slug_name(self):
+        if not self.slug:
+            return
+        return self.slug.slug

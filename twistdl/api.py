@@ -64,8 +64,8 @@ class TwistDL(object):
                 result.append(anime)
         return result
 
-    def get_anime_by_id(self, anime_id):
-        return next(iter(filter(lambda anime: anime.id == anime_id, self.animes)), None)
+    def get_anime_by(self, field, value):
+        return next(iter(filter(lambda anime: getattr(anime, field) == value, self.animes)), None)
 
     def download_stream(self, url, file, chunk_size=1024):
         """Download url to file and get download progress through generator

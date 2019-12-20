@@ -23,4 +23,4 @@ class Slug(BaseTwistObject):
 
     @property
     def anime(self):
-        self.client.get_anime_by_id(self.anime_id)
+        self.client.get_anime_by('id', self.anime_id)
