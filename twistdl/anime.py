@@ -48,7 +48,11 @@ class Anime(BaseTwistObject):
         data['slug'] = self.slug.to_dict()
         return data
 
-    def sources(self, hard_reload=False):
-        if not self._sources or hard_reload:
-            self._sources = self.client.anime_sources(self)
+    def fetch_sources(self):
+        self._sources = self.client.anime_sources(self)
+
+    @property
+    def sources(self):
+        if not self._sources:
+            self.fetch_sources()
         return self._sources

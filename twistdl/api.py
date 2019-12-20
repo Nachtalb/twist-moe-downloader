@@ -34,10 +34,14 @@ class TwistDL(object):
 
         return response.json(), built_url
 
-    def animes(self, hard_reload=False):
-        if not self._animes or hard_reload:
-            response_data, url = self._request(endpoint='anime')
-            self._animes = list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
+    def fetch_animes(self):
+        response_data, url = self._request(endpoint='anime')
+        self._animes = list(map(lambda anime: Anime.de_json(anime, (url, {}), self), response_data))
+
+    @property
+    def animes(self):
+        if not self._animes:
+            self.fetch_animes()
         return self._animes
 
     def anime_sources(self, anime):
