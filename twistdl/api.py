@@ -2,9 +2,10 @@ import requests
 import six
 
 from pathlib2 import Path
+from six.moves import filter
+from six.moves import map
 from twistdl import Anime
 from twistdl import Source
-
 
 class TwistDL(object):
     base_url = 'https://twist.moe'
@@ -25,7 +26,7 @@ class TwistDL(object):
         data = data or {}
         headers = headers or {}
 
-        built_url = f'{self.base_url}/{self.api_path}/{endpoint}'
+        built_url = '{}/{}/{}'.format(self.base_url, self.api_path, endpoint)
 
         headers.update({'x-access-token': self.api_token})
 

@@ -3,7 +3,7 @@ import json
 
 class BaseTwistObject(object):
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs):
         self.client = kwargs.get('client')
         self.request = kwargs.get('request')
 

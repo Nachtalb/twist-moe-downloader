@@ -1,5 +1,6 @@
-from twistdl.base import BaseTwistObject
+from six.moves import filter
 from twistdl import Slug
+from twistdl.base import BaseTwistObject
 
 
 class Anime(BaseTwistObject):

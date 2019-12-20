@@ -4,9 +4,12 @@ import sys
 from PyInquirer import prompt
 from argparse import ArgumentParser
 from pathlib2 import Path
-from twistdl import TwistDL
-from tqdm import tqdm
+from six.moves import filter
+from six.moves import input
+from six.moves import map
 from six.moves import range
+from tqdm import tqdm
+from twistdl import TwistDL
 
 
 class TwistDLCLI(object):
@@ -85,7 +88,7 @@ class TwistDLCLI(object):
         return episode_range
 
     def validate_range(self, episode_range, anime):
-        if '-' not in episode_range:
+        if isinstance(episode_range, int) or '-' not in episode_range:
             episode_number = self.validate_episode(episode_range, anime)
             return episode_number, episode_number
         else:
