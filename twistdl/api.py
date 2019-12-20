@@ -67,8 +67,8 @@ class TwistDL(object):
     def get_anime_by_id(self, anime_id):
         return next(iter(filter(lambda anime: anime.id == anime_id, self.animes())), None)
 
-    def download_stream(self, source, file, chunk_size=1024):
-        """Download source to file and get download progress through generator
+    def download_stream(self, url, file, chunk_size=1024):
+        """Download url to file and get download progress through generator
 
         Args:
             file: Can either be a pathlike obj, str or filelike obj
@@ -92,7 +92,7 @@ class TwistDL(object):
             'Referer': self.base_url
         }
 
-        response = requests.get(source.url, headers=headers, stream=True)
+        response = requests.get(url, headers=headers, stream=True)
 
         file_size = int(response.headers['Content-Length'])
         toatal_chunks = int(file_size / chunk_size)
