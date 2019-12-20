@@ -56,7 +56,7 @@ class TwistDL(object):
         title = (title or '').lower()
         slug = (slug or '').lower()
 
-        for anime in self.animes():
+        for anime in self.animes:
             if title and title in anime.title.lower():
                 result.append(anime)
                 continue
@@ -65,7 +65,7 @@ class TwistDL(object):
         return result
 
     def get_anime_by_id(self, anime_id):
-        return next(iter(filter(lambda anime: anime.id == anime_id, self.animes())), None)
+        return next(iter(filter(lambda anime: anime.id == anime_id, self.animes)), None)
 
     def download_stream(self, url, file, chunk_size=1024):
         """Download url to file and get download progress through generator
