@@ -35,7 +35,11 @@ class TwistDLCLI(object):
         if not episode_range:
             episode_range = self.choose_range(anime)
 
-        first_episode, last_episode = self.validate_range(episode_range, anime)
+        if not episode_range:
+            first_episode, last_episode = anime.first_episode.number, anime.last_episode.number
+        else:
+            first_episode, last_episode = self.validate_range(episode_range, anime)
+
         sources = self.get_sources_from_range(first_episode, last_episode, anime)
 
         path = self.get_path(anime)
