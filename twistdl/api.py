@@ -110,3 +110,6 @@ class TwistDL(object):
                 for chunks_downloaded, chunk in enumerate(response.iter_content(chunk_size=chunk_size), 1):
                     file_obj.write(chunk)
                     yield chunks_downloaded, toatal_chunks
+
+    def download(self, url, file):
+        list(self.download_stream(url, file))

@@ -59,3 +59,6 @@ class Source(BaseTwistObject):
 
     def download_stream(self, file, **kwargs):
         return self.client.download_stream(self.url, file, **kwargs)
+
+    def download(self, file):
+        self.client.download(self.url, file)

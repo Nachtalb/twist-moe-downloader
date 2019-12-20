@@ -58,6 +58,8 @@ class Anime(BaseTwistObject):
             self.fetch_sources()
         return self._sources
 
+    episodes = sources
+
     @property
     def slug_name(self):
         if not self.slug:
@@ -65,7 +67,7 @@ class Anime(BaseTwistObject):
         return self.slug.slug
 
     @property
-    def toal_episodes(self):
+    def total_episodes(self):
         return len(self.sources)
 
     @property
