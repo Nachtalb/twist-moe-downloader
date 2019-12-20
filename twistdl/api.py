@@ -7,6 +7,12 @@ from six.moves import map
 from twistdl import Anime
 from twistdl import Source
 
+try:
+    from pathlib import Path as py3Path
+except ImportError:
+    py3Path = None
+
+
 class TwistDL(object):
     base_url = 'https://twist.moe'
     api_path = 'api'
@@ -78,7 +84,7 @@ class TwistDL(object):
             Tuple like (chunks downloaded, total chunks)
         """
         file_obj = None
-        if isinstance(file, Path):
+        if isinstance(file, Path) or (file is not None and isinstance(file, py3Path)):
             pass
         elif isinstance(file, six.string_types):
             file = Path(file)
