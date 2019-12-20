@@ -62,3 +62,18 @@ class Anime(BaseTwistObject):
         if not self.slug:
             return
         return self.slug.slug
+
+    @property
+    def toal_episodes(self):
+        return len(self.sources)
+
+    @property
+    def first_episode(self):
+        return self.sources[0]
+
+    @property
+    def last_episode(self):
+        return self.sources[-1]
+
+    def episode(self, number):
+        return next(iter(filter(lambda source: source.number == number, self.sources)), None)

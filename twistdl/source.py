@@ -36,7 +36,7 @@ class Source(BaseTwistObject):
 
     @property
     def anime(self):
-        self.client.get_anime_by('id', self.anime_id)
+        return self.client.get_anime_by('id', self.anime_id)
 
     @property
     def url(self):
