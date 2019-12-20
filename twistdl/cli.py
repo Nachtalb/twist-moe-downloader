@@ -122,7 +122,7 @@ class TwistDLCLI(object):
         return list(filter(lambda source: source.number in episodes, anime.sources))
 
     def parse_args(self):
-        usage = 'python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]'
+        usage = 'python cli.py [title] [--range RANGE][--directory DIRECTORY] [-h]'
         parser = ArgumentParser(
             description='Twist-dl is a small python tool for downloading video contents of series available on the website '
                         'twist.moe locally! To download a list of particular series, enter a keyword of the series name. '

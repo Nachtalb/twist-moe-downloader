@@ -7,6 +7,8 @@ This is a small python tool for downloading video contents of series available o
 To download a particular series, use the series's url like so `https://twist.moe/a/made-in-abyss` and to search for
 a series enter a part of its name as found in a twist.moe's url string like `fate`.
 
+Additional to the commandline interface this package also provides a pure python object oriented api for `twist.moe`.
+
 Remember to support twist.moe with donations if you can, as they do a great job of operating their site!
 
 ### Installation
@@ -21,14 +23,14 @@ $ sudo pip install -r requirements.txt
 
 And you're done! You can started with something as simple as the command below.
 
-`$ python twist-dl.py fate`
+`$ python cli.py fate`
 
 ### Running the script
 
 ```bash
-$ python twist-dl.py
+$ python cli.py
 
-usage: python twist-dl.py [title] [--range RANGE][--directory DIRECTORY] [-h]
+usage: python cli.py [title] [--range RANGE][--directory DIRECTORY] [-h]
 
 Twist-dl is a small python tool for downloading video contents of series
 available on the website twist.moe locally! To download a list of particular
@@ -52,18 +54,35 @@ optional arguments:
 
 ### Example Usage:
 
-##### Download And Search
-Download by passing the series title as found from search. Not specifying a range with `--range` will download the entire contents of the series.
-```bash
-$ python twist-dl.py code
-? Anime found. Please choose a series to download:  code-geass-hangyaku-no-lelouch-r2
-Successfully gathered series information.
-Episode selection between 1-25. To select range input range i.e. '1-5'. Press 'Enter' to download all contents.
-Input:
-Downloading MP4s to Path: anime/code/ with episode range of 1-25.
-anime/code/code-geass-hangyaku-no-lelouch-r2-episode-1.mp4: 489619KB [00:48, 10191.13KB/s]
-...
+#### Search and download with CLI
 
+Download by passing the series title as found from search. Not specifying a range with `--range` will prompt you with
+to a enter range. If no range is entrered all episodes will be downloaded.
+```bash
+$ python cli.py code
+? Anime(s) found. Please choose a series to download:  Code Geass: Hangyaku no Lelouch R2
+Episode selection between 1-25. To download a range enter "1-5", for a single episode enter "5" or leave it empty press "Enter" to download all episodes.
+Input: 1-5
+anime/code-geass-hangyaku-no-lelouch-r2/Code Geass: Hangyaku no Lelouch R2 - 01.mp4:   6%|▋         | 30/478 [00:12<03:13,  2.32MB/s]
+...
 ```
+
+#### Search and download with API
+
+```python
+from pathlib import Path
+from twistdl import TwistDL
+
+client = TwistDL()
+animes = client.search_animes(title='code geass')
+
+for anime in animes:
+    for episode in anime.episodes:
+        file = Path(f'anime/{anime.slug_name}/{anime.title} - {episode.number}')
+        print(f'{anime.title} - {episode.number}')
+        file.parent.mkdir(exist_ok=True, parents=True)
+        episode.download(file)
+```
+
 ##### Disclaimer
 Downloading copyright videos may be illegal in your country. This tool is for educational purposes only.
