@@ -1,3 +1,2 @@
-from twistdl import TwistDLCLI
-cli = TwistDLCLI()
-cli.main()
+from twistdl.cli import main
+main()

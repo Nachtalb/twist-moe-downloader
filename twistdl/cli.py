@@ -73,6 +73,8 @@ class TwistDLCLI(object):
             }
         ]
         answers = prompt(questions)
+        if 'title' not in answers:
+            exit()
         return answers['title']
 
     def choose_range(self, anime):
@@ -148,5 +150,8 @@ class TwistDLCLI(object):
 
 
 def main():
-    cli = TwistDLCLI()
-    cli.main()
+    try:
+        cli = TwistDLCLI()
+        cli.main()
+    except (KeyboardInterrupt, EOFError):
+        print('Exit')
