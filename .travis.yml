@@ -6,4 +6,4 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - python test/decryption-endpoint-test.py
+  - python -m unittest twistdl/decryption-endpoint-test.py
